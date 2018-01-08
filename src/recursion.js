@@ -60,9 +60,7 @@ var isEven = function(n) {
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
-    if(n === 0) {
-        return 0;
-    } else if(n === 1) {
+    if(n === 0 || n === 1) {
         return 0;
     }
     else if ( n>0 ) {
@@ -79,9 +77,8 @@ var range = function(x, y) {
         return [];
     } else if (x<y) {
         return [x+1].concat(range(x+1, y));
-    } else {
-        return [x-1].concat(range(x-1, y));
     }
+        return [x-1].concat(range(x-1, y));
 };
 
 // 7. Compute the exponent of a number.
@@ -147,10 +144,26 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+    if (x === 0 && y === 0) {
+        return NaN;
+    } else if (x === 0) {
+        return 0;
+    } else if (x<0 && y>0) {
+        return -modulo(-x,y);
+    } else if (x<0 && y<0) {
+        return -modulo(-x, -y);
+    } else if (x>0 && y<0) {
+        return modulo(x, -y);
+    } else if (x < y) {
+        return x;
+    } else {
+        return modulo(x-y, y);
+    }
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
+// -- it should multiply 2 integers
 var multiply = function(x, y) {
     if(y === 0 || x === 0) {
         return 0;
@@ -167,7 +180,25 @@ var multiply = function(x, y) {
 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods.
+// -- it should return the quotient of 2 numbers
 var divide = function(x, y) {
+    if(y === 0) {
+        return NaN;
+    } else if(x === 0 || x<y) {
+        return 0;
+    } else if (y === x) {
+        return 1;
+    } else if(y === 1) {
+        return x;
+    } else if (x<0 && y<0) {
+        return divide(-x, -y);
+    } else if (x<0 && y>0) {
+        return -divide(x, y);
+    } else if (x>0 && y<0) {
+        return -divide(x, -y);
+    } else if(x>y) {
+        return divide(x-y, y) + divide(y, y);
+    }
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
