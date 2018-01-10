@@ -206,8 +206,34 @@ var divide = function(x, y) {
 // gcd(4,36); // 4
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
-var gcd = function(x, y) {
-};
+
+var gcd = function (x, y) {
+    if(x < 0 || y < 0) {
+        return null;
+    } else if (x === y) {
+        return x;
+    } else if (x > y) {
+        return gcd(x-y, y);
+    } else {
+        return gcd(x, y-x);
+    }
+}
+
+// var gcd = function(x, y, divisor) {
+//     if(x < 0 || y < 0) {
+//         return null;
+//     } else if (x === 1 || y === 1) {
+//         return 1;
+//     }
+//     if (divisor === undefined) {
+//         var divisor = Math.min(x, y);
+//     }
+//     if (x%divisor === 0 && y%divisor === 0) {
+//         return divisor;
+//     } else {
+//         return gcd(x, y, divisor-1);
+//     }
+// };
 
 // 15. Write a function that compares each character of two strings and returns true if
 // both are identical.
@@ -333,14 +359,14 @@ var countValuesInObj = function(obj, value) {
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
-    for(key in obj) {
+    for(var key in obj) {
         if(key === oldKey) {
             obj[newKey] = obj[oldKey];
             delete obj[oldKey];
         }
         var value = obj[key];
         if(typeof value === 'object') {
-            return replaceKeysInObj(value, oldKey, newKey);
+            replaceKeysInObj(value, oldKey, newKey);
         }
     }
     return obj;
@@ -439,6 +465,20 @@ var flatten = function(array) {
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj) {
+    if(obj === undefined) {
+        obj = {};
+    }
+    if(str.length === 0) {
+        return obj;
+    } else {
+        var key = str[0];
+        if(obj[key] === undefined) {
+            obj[key] = 1;
+        } else {
+            obj[key]++;
+        }
+        return letterTally(str.slice(1), obj);
+    }
 };
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
