@@ -540,7 +540,16 @@ var alternateSign = function(array) {
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str) {
-
+  var temp;
+  var result = str.split(' ');
+  var numToStr = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  result.forEach(function(word, index) {
+    temp = Number(word);
+    if(!isNaN(temp)) {
+      result[index] = numToStr[temp];
+    }
+  });
+  return result.join(' ');
 };
 
 
@@ -548,6 +557,22 @@ var numToText = function(str) {
 
 // 37. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node) {
+    var count = 0;
+    var body = document.body;
+    node = node || body;
+
+    var tagList = node.getElementsByTagName(tag);
+    count += tagList.length;
+
+    var childNodes = node.childNodes;
+
+    if(childNodes.length > 0) {
+        childNodes.forEach(function(nodeElement){
+            count += tagCount(tag, nodeElement);
+        });
+    }
+
+    return count;
 };
 
 // 38. Write a function for binary search.
@@ -555,12 +580,59 @@ var tagCount = function(tag, node) {
 // binarySearch(array, 5) // 5
 // https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search
 var binarySearch = function(array, target, min, max) {
+  if(min === undefined) {
+    min = 0;
+  }
+  if(max === undefined) {
+    max = array.length;
+  }
+  var guess = Math.floor((min+max)/2);
+  if(array[guess] === target) {
+    return guess;
+  } else if (min > max) {
+    return null;
+  } else if(array[guess] < target) {
+    min = guess + 1;
+    return binarySearch(array, target, min, max);
+  } else {
+    max = guess - 1;
+    return binarySearch(array, target, min, max);
+  }
 };
 
 // 39. Write a merge sort function.
 // mergeSort([34,7,23,32,5,62]) // [5,7,23,32,34,62]
 // https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms
 var mergeSort = function(array) {
+  if(array.length === 0 || array.length === 1) {
+    return array;
+  }
+  var mid = Math.floor(array.length/2);
+  var leftArray = array.slice(0, mid);
+  var rightArray = array.slice(mid);
+
+  return merge(mergeSort(leftArray), mergeSort(rightArray));
+
+  function merge(left, right) {
+    var result = [];
+    while(left.length>0 && right.length>0) {
+      if(left[0] < right[0]) {
+        result.push(left.shift());
+      } else {
+        result.push(right.shift());
+      }
+    }
+
+    while(left.length > 0) {
+      result.push(left.shift());
+    }
+    while(right.length > 0) {
+      result.push(right.shift());
+    }
+
+    return result;
+  }
+
 };
 
 // 40. Deeply clone objects and arrays.
