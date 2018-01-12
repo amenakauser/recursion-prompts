@@ -556,13 +556,19 @@ var numToText = function(str) {
 // *** EXTRA CREDIT ***
 
 // 37. Return the number of times a tag occurs in the DOM.
+
 var tagCount = function(tag, node) {
+
     var count = 0;
     var body = document.body;
     node = node || body;
 
-    var tagList = node.getElementsByTagName(tag);
-    count += tagList.length;
+
+    var tagName = node.tagName;
+
+    if(tagName === tag || tagName === tag.toUpperCase()) {
+        count++;
+    }
 
     var childNodes = node.childNodes;
 
@@ -641,4 +647,26 @@ var mergeSort = function(array) {
 // console.log(obj2); // {a:1,b:{bb:{bbb:2}},c:3}
 // obj1 === obj2 // false
 var clone = function(input) {
+  if(Array.isArray(input)) {
+    var result = [];
+    input.forEach(function(element){
+      if(Array.isArray(element)) {
+        result.push(clone(element));
+      } else {
+          result.push(element);
+      }
+    });
+  } else {
+      var result = {};
+      var value;
+      for(var key in input) {
+        value = input[key];
+        if(typeof value === 'object') {
+          result[key] = clone(value);
+        } else {
+            result[key] = value;
+        }
+      }
+  }
+  return result;
 };
