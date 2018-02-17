@@ -103,7 +103,7 @@ var exponent = function(base, exp) {
 var powerOfTwo = function(n) {
     if(n === 1) {
         return true;
-    } else if(n < 1) {
+    } else if(n < 2) {
         return false;
     } else {
         return powerOfTwo(n/2);
@@ -539,17 +539,37 @@ var alternateSign = function(array) {
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
+// var numToText = function(str) {
+//   var temp;
+//   var result = str.split(' ');
+//   var numToStr = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+//   result.forEach(function(word, index) {
+//     temp = Number(word);
+//     if(!isNaN(temp)) {
+//       result[index] = numToStr[temp];
+//     }
+//   });
+//   return result.join(' ');
+// };
+
 var numToText = function(str) {
   var temp;
-  var result = str.split(' ');
+  var array = str.split(' ');
   var numToStr = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-  result.forEach(function(word, index) {
-    temp = Number(word);
+  temp = Number(array[0]);
+  if (array.length === 1) {
     if(!isNaN(temp)) {
-      result[index] = numToStr[temp];
+      return numToStr[temp];
+    } else {
+      return array[0];
     }
-  });
-  return result.join(' ');
+  }
+  var strReturn = (array.slice(1).join(' '));
+  if(!isNaN(temp)) {
+    return numToStr[temp] + ' ' + numToText(strReturn);
+  } else {
+    return array[0] + ' ' + numToText(strReturn);
+  }
 };
 
 
@@ -650,7 +670,7 @@ var clone = function(input) {
   if(Array.isArray(input)) {
     var result = [];
     input.forEach(function(element){
-      if(Array.isArray(element)) {
+      if(typeof element === 'object') {
         result.push(clone(element));
       } else {
           result.push(element);
